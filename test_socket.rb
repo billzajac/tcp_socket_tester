@@ -14,9 +14,6 @@ end
 addr = Socket.pack_sockaddr_in(port, host)
 sock = Socket.new(:AF_INET, :SOCK_STREAM, 0)
 
-# This is a way to achieve a timeout for the socket connection
-# http://www.ruby-forum.com/topic/2225837
-
 # First we will check to see if the socket is closed
 connect_status = ""
 begin
@@ -24,8 +21,10 @@ begin
 rescue IO::WaitWritable
 #rescue Errno::EINPROGRESS
   begin 
-    # If we haven't timed out, then lets try to connect again
+    # This is a way to achieve a timeout for the socket connection
+    # http://www.ruby-forum.com/topic/2225837
     if IO.select(nil, [sock], nil, timeout)
+      # If we haven't timed out, then lets try to connect again
       begin
         sock.connect_nonblock(addr)
       rescue Errno::ECONNREFUSED
@@ -37,6 +36,7 @@ rescue IO::WaitWritable
         connect_status = "connected"
       end
     else
+      sock.close
       connect_status = "timed out"
     end
   end

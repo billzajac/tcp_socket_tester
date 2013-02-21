@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require 'socket'
+
+host = ARGV[0]
+port = ARGV[1]
+timeout = ARGV[2] ? ARGV[2] : 0.5
+
+if port.nil?
+  puts "USAGE: #{$0} HOST PORT [TIMEOUT]"
+  exit(1)
+end
+
+addr = Socket.pack_sockaddr_in(port, host)
+sock = Socket.new(:AF_INET, :SOCK_STREAM, 0)
+
+# This is a way to achieve a timeout for the socket connection
+# http://www.ruby-forum.com/topic/2225837
+
+# First we will check to see if the socket is closed
+connect_status = ""
+begin
+  sock.connect_nonblock(addr)
+rescue IO::WaitWritable
+#rescue Errno::EINPROGRESS
+  begin 
+    # If we haven't timed out, then lets try to connect again
+    if IO.select(nil, [sock], nil, timeout)
+      begin
+        sock.connect_nonblock(addr)
+      rescue Errno::ECONNREFUSED
+        # Note that we don't just check for refused in the outer block
+        # because it could force us to wait a long time if it is 
+        # actually going to time out instead
+        connect_status = "connection refused"
+      rescue Errno::EISCONN # check for connection failure
+        connect_status = "connected"
+      end
+    else
+      connect_status = "timed out"
+    end
+  end
+end
+
+puts connect_status

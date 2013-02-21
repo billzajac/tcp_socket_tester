@@ -27,13 +27,13 @@ rescue IO::WaitWritable
       # If we haven't timed out, then lets try to connect again
       begin
         sock.connect_nonblock(addr)
+        connect_status = "connected"
       rescue Errno::ECONNREFUSED
         # Note that we don't just check for refused in the outer block
         # because it could force us to wait a long time if it is 
         # actually going to time out instead
         connect_status = "connection refused"
       rescue Errno::EISCONN # check for connection failure
-        connect_status = "connected"
       end
     else
       sock.close

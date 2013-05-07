@@ -38,6 +38,7 @@ rescue Exception => e
    exit 1
 end
 
+# NOTE: It took some trial and error to get the order and nesting of rescues correct
 #------------------------------------
 # First we will check to see if the socket is closed
 #------------------------------------

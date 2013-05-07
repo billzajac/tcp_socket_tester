@@ -14,11 +14,11 @@ A super simply ruby tcp socket tester
     $ ./test_socket.rb 127.0.0.1 23
     connection refused - nothing listening at: 127.0.0.1:23
 
-    $ ./test_socket.rb foo 22
-    Error with host or port: foo:22 -- (getaddrinfo: nodename nor servname provided, or not known)
-
     $ ./test_socket.rb 10.190.58.10 3456
     timed out - likely firewall blocking: 10.190.58.10:3456
+
+    $ ./test_socket.rb foo 22
+    Error with host or port: foo:22 -- (getaddrinfo: nodename nor servname provided, or not known)
 
 ## Source
 * https://github.com/billzajac/tcp_socket_tester

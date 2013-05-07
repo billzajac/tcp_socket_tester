@@ -20,3 +20,6 @@ A super simply ruby tcp socket tester
     $ ./test_socket.rb 10.190.58.10 3456
     timed out - likely firewall blocking: 10.190.58.10:3456
 
+## Source
+* https://github.com/billzajac/tcp_socket_tester
+

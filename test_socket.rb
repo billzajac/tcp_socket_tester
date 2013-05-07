@@ -7,12 +7,11 @@ host = ARGV[0]
 port = ARGV[1]
 timeout = ARGV[2] ? ARGV[2].to_f : @default_timeout
 
-def usage(message)
+def usage(message = nil)
   puts "USAGE: #{$0} HOST PORT [TIMEOUT]"
   puts "       TIMEOUT is in seconds (can be decimal) - default: #{@default_timeout}"
   puts
-  puts message
-  puts
+  puts "#{message}\n\n" if message
   exit(1)
 end
 
